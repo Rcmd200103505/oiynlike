@@ -62,7 +62,7 @@
             v-model="search"
           />
           <div class="text-h6 text-left mb-4">
-            {{ search.length > 0 ? "Резльутаты поиска" : "Рекомендации" }}
+            {{ search.length > 0 ? "Результаты поиска" : "Рекомендации" }}
           </div>
           <div v-if="search.length > 0 && !placeList.length">
             По вашему запросу ничего не найдено :(

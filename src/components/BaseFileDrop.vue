@@ -25,12 +25,14 @@
 import { ref } from "vue";
 
 export default {
-  setup() {
+  setup(props, { emit }) {
     const imagePreview = ref(null);
     const fileInput = ref(null);
+    const photo = ref(null);
 
     function handleFileInput(event) {
       const file = event.target.files[0];
+      emit('fileSelected', file);
       previewImage(file);
     }
 
@@ -47,6 +49,7 @@ export default {
     function handleDrop(event) {
       event.preventDefault();
       const file = event.dataTransfer.files[0];
+      emit('fileSelected', file);
       previewImage(file);
     }
 
@@ -62,6 +65,8 @@ export default {
       handleDrop,
       openFileInput,
       fileInput,
+      emit,
+      photo,
     };
   },
 };
