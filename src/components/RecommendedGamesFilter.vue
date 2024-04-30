@@ -28,18 +28,17 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { CITY_LIST, GAME_TYPES, PERIOD_TYPES } from "@/constants";
+import { ref } from "vue";
+import GameService from "@/api/service/gameService";
 
-export default {
-  setup() {
-    return {
-      CITY_LIST,
-      GAME_TYPES,
-      PERIOD_TYPES,
-    };
-  },
-};
+const filters = ref([]);
+async function fetchGameFilters() {
+  filters.value = await GameService.fetchGameFilters();
+}
+
+fetchGameFilters();
 </script>
 
 <style lang="scss" module>

@@ -1,5 +1,5 @@
 <template>
-  <ul class="bg-blue-darken-4 rounded-xl d-flex justify-space-around py-3">
+  <ul class="bg-blue-darken-4 rounded-lg d-flex justify-space-around py-3">
     <li
       v-for="(item, index) in items"
       :key="index"
@@ -7,7 +7,7 @@
     >
       <component
         :is="item.to ? 'router-link' : 'span'"
-        class="rounded-xl py-1 px-5 text-decoration-none"
+        class="rounded-lg py-2 px-5 text-decoration-none text-body-2 font-weight-bold"
         :class="
           activeTabIndex === index
             ? 'bg-white text-blue-darken-4'

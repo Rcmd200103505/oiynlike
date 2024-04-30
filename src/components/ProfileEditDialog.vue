@@ -1,5 +1,5 @@
 <template>
-  <BaseDialog>
+  <BaseDialog v-model="dialog">
     <template #activator="{ activatorProps }">
       <v-btn
         icon="fas fa-pen"
@@ -19,15 +19,19 @@
         </v-card-title>
         <v-card-item>
           <v-form @submit.prevent="handleSave" class="d-flex flex-column">
-            <v-avatar size="130" class="mx-auto d-block mb-3">
-              <v-img
-                alt="John"
-                src="https://cdn.vuetifyjs.com/images/john.jpg"
-              ></v-img>
-              <v-badge>
-                <v-icon icon="fas fa-plus" />
-              </v-badge>
+            <v-avatar size="130" class="mx-auto d-block mb-2">
+              <v-img alt="avatar" :src="profilePic" />
             </v-avatar>
+            <v-btn variant="text" size="x-small" @click="openFileInput">
+              Сменить фото профиля
+            </v-btn>
+            <input
+              type="file"
+              class="d-none"
+              ref="fileInput"
+              accept="image/*"
+              @change="handleFileInput"
+            />
             <v-label>Имя</v-label>
             <v-text-field
               placeholder="Имя"
@@ -76,15 +80,19 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import BaseDialog from "@/components/BaseDialog.vue";
 import { useAuthStore } from "@/store/useAuthStore";
 import { storeToRefs } from "pinia";
 import ProfileService from "@/api/service/profileService";
+import { DEFAULT_PICTURE_SRC } from "@/constants";
+import { useToastStore } from "@/store/useToastStore";
 
 export default {
   components: { BaseDialog },
   setup() {
+    const dialog = ref(false);
+
     const authStore = useAuthStore();
     const { user } = storeToRefs(authStore);
 
@@ -101,8 +109,15 @@ export default {
       isProcessing.value = true;
 
       try {
+        if (imagePreview.value) {
+          const formData = new FormData();
+          formData.append("photo", newPhoto.value);
+          form.value.photo_url = await ProfileService.uploadImage(formData);
+        }
         await ProfileService.updateProfile(form.value);
         await authStore.refreshUser();
+        useToastStore().addToast("Вы успешно присоединились к игре!");
+        dialog.value = false;
       } catch (e) {
         console.error(e);
       } finally {
@@ -110,10 +125,53 @@ export default {
       }
     }
 
+    const imagePreview = ref(null);
+    const fileInput = ref(null);
+    const newPhoto = ref(null);
+
+    function handleFileInput(event) {
+      const file = event.target.files[0];
+      newPhoto.value = file;
+      previewImage(file);
+    }
+
+    function openFileInput() {
+      if (fileInput.value != null) {
+        fileInput.value.click();
+      }
+    }
+
+    function previewImage(file) {
+      if (!file.type.startsWith("image/")) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        imagePreview.value = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    const profilePic = computed(() => {
+      if (imagePreview.value) {
+        return imagePreview.value;
+      }
+      if (user.value?.photo_url.length) {
+        return user.value.photo_url;
+      }
+      return DEFAULT_PICTURE_SRC;
+    });
+
     return {
       form,
+      handleFileInput,
       handleSave,
+      imagePreview,
+      fileInput,
+      profilePic,
+      newPhoto,
+      openFileInput,
       isProcessing,
+      dialog,
     };
   },
 };

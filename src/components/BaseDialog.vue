@@ -1,5 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen>
+  <v-dialog
+    :model-value="modelValue"
+    @update:model-value="$emit('update:modelValue', $event)"
+    transition="dialog-bottom-transition"
+    fullscreen
+  >
     <template v-slot:activator="{ props: activatorProps }">
       <slot name="activator" :activatorProps="activatorProps" />
     </template>
@@ -8,18 +13,20 @@
 </template>
 
 <script>
-import { ref } from "vue";
-
 export default {
-  setup() {
-    const dialog = ref(false);
-
+  props: {
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ["update:modelValue"],
+  setup(props, { emit }) {
     function close() {
-      dialog.value = false;
+      emit("update:modelValue", false);
     }
 
     return {
-      dialog,
       close,
     };
   },

@@ -1,17 +1,7 @@
 <template>
-  <BaseDialog>
-    <template #activator="{ activatorProps }">
-      <v-btn
-        icon
-        class="fas fa-chevron-right"
-        variant="plain"
-        size="small"
-        v-bind="activatorProps"
-        @click="closeDialog"
-      />
-    </template>
+  <BaseDialog v-model="dialog">
     <template #default="{ close }">
-      <v-card>
+      <v-card v-if="game">
         <v-card-title>
           <h1 class="text-h5 font-weight-bold" @click="close">
             <v-btn icon="fas fa-arrow-left-long" variant="flat" />
@@ -25,6 +15,7 @@
             <GameInfo :game="game" show-description />
           </div>
           <v-btn
+            v-if="isJoinButtonShown"
             variant="flat"
             color="blue-darken-4"
             rounded="lg"
@@ -44,25 +35,53 @@
 <script>
 import BaseDialog from "@/components/BaseDialog.vue";
 import GameInfo from "@/components/GameInfo.vue";
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useToastStore } from "@/store/useToastStore";
 import GameService from "@/api/service/gameService";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default {
   components: { BaseDialog, GameInfo },
   props: {
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
     game: {
       type: Object,
-      required: true,
     },
   },
-  setup(props) {
-    const isDialogShown = ref(false);
+  emits: ["update", "update:modelValue", "close"],
+  setup(props, { emit }) {
+    const authStore = useAuthStore();
+    const dialog = ref(false);
     const isProcessing = ref(false);
 
-    const closeDialog = () => {
-      isDialogShown.value = false;
-    };
+    const isJoinButtonShown = computed(() => {
+      return (
+        props.game?.host_user.user_id !== authStore.user.id &&
+        !props.game?.matched_players.find(
+          (p) => p.user_id === authStore.user.id
+        )
+      );
+    });
+
+    watch(
+      () => dialog.value,
+      (newV) => {
+        emit("update:modelValue", newV);
+        if (!newV) {
+          emit("close");
+        }
+      }
+    );
+
+    watch(
+      () => props.modelValue,
+      (newV) => {
+        dialog.value = newV;
+      }
+    );
 
     const handleJoin = async () => {
       isProcessing.value = true;
@@ -70,7 +89,8 @@ export default {
       try {
         await GameService.joinGame(props.game.id);
         useToastStore().addToast("Вы успешно присоединились к игре!");
-        isDialogShown.value = false;
+        dialog.value = false;
+        emit("update");
       } catch (e) {
         useToastStore().addToast("Не удалось присоединиться к игре", "error");
       } finally {
@@ -78,7 +98,7 @@ export default {
       }
     };
 
-    return { closeDialog, handleJoin, isProcessing, isDialogShown };
+    return { isJoinButtonShown, handleJoin, isProcessing, dialog };
   },
 };
 </script>

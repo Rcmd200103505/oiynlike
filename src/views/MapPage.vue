@@ -3,7 +3,7 @@
     <l-map
       ref="mapRef"
       v-model:zoom="zoom"
-      :center="[43.238949, 76.889709]"
+      :center="center"
       :class="$style.map"
     >
       <l-tile-layer
@@ -18,7 +18,10 @@
       >
         <l-popup>
           <div class="text-h6">{{ place.name }}</div>
-          <div class="text-body-1">{{ place.address }}</div>
+          <div class="text-body-1">{{ place.city }}, {{ place.address }}</div>
+          <a target="_blank" :href="place.link" class="text-decoration-none">{{
+            $t("Открыть в 2GIS")
+          }}</a>
         </l-popup>
       </l-marker>
     </l-map>
@@ -72,6 +75,7 @@
               v-for="place in placeList"
               :key="place.address"
               class="pa-3 elevation-1 rounded-lg"
+              @click="onClickPlaceItem(place)"
             >
               <div class="text-body-1">{{ place.name }}</div>
               <div class="text-caption">
@@ -83,7 +87,16 @@
                 />
                 <span>{{ place.rating }}</span>
               </div>
-              <div class="text-body-2">{{ place.address }}</div>
+              <div class="text-body-2">
+                {{ place.city }}, {{ place.address }}
+              </div>
+              <a
+                target="_blank"
+                :href="place.link"
+                class="text-body-2 text-blue text-decoration-none"
+              >
+                {{ $t("Открыть в 2GIS") }}
+              </a>
             </li>
           </ul>
         </v-card-text>
@@ -110,6 +123,7 @@ export default {
     const zoom = ref(12);
     const coordinates = [50, 50];
     const search = ref("");
+    const center = ref([43.238949, 76.889709]);
 
     const placeList = computed(() =>
       search.value.length > 0
@@ -127,6 +141,10 @@ export default {
       sheet.value = true;
     }
 
+    function onClickPlaceItem(place) {
+      center.value = place.coordinates;
+    }
+
     return {
       mapRef,
       zoom,
@@ -134,6 +152,8 @@ export default {
       placeList,
       sheet,
       search,
+      center,
+      onClickPlaceItem,
       onSearchInput,
     };
   },

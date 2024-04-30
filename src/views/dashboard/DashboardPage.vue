@@ -9,7 +9,7 @@
       />
       <NotificationsDialog />
     </div>
-    <TabsComponent class="my-5" :items="tabItems" />
+    <TabsComponent class="mt-5" :items="tabItems" />
     <router-view />
   </div>
 </template>

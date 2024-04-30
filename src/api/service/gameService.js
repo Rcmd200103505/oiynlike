@@ -16,4 +16,16 @@ export default class GameService {
   static joinGame(gameCardId) {
     return HttpRequests.put("/api/join", { gameCardId });
   }
+
+  static fetchGameFilters() {
+    return HttpRequests.get("/api/gamecards/filters");
+  }
+
+  static fetchChats() {
+    return HttpRequests.get("/api/user/chats");
+  }
+
+  static sendMessage(chatId, text) {
+    return HttpRequests.post(`api/chat/${chatId}/message`, { text });
+  }
 }

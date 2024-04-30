@@ -4,13 +4,26 @@
       v-if="noGames"
       class="d-flex flex-column align-center text-center flex-grow-1 justify-center"
     >
-      <!-- Контент для случая, когда нет игр -->
+      <img
+        :src="require('@/assets/images/no-games.svg')"
+        alt="no games"
+        width="100"
+      />
+      <h2 class="text-h5">
+        У вас пока нет <br />
+        своих игр
+      </h2>
+      <p class="text-body-2 text-grey-darken-1 my-4">
+        Стань инициатором своей собственной игры! Создавай прямо сейчас!
+      </p>
+      <GameCreateDialog />
     </div>
     <template v-else>
-      <div class="d-flex ga-5">
+      <div class="d-flex ga-5 mt-3">
         <div
           v-for="filter in filters"
           :key="filter.value"
+          class="cursor-pointer"
           :class="
             activeFilter === filter.value
               ? 'text-blue-darken-4'
@@ -25,6 +38,7 @@
         class="flex-grow-1 my-5"
         :items="filteredGamecards"
         :isProcessing="isProcessing"
+        @update="fetchGamecards"
       />
       <GameCreateDialog />
     </template>
@@ -96,6 +110,7 @@ export default {
       filters,
       loaded,
       filteredGamecards,
+      fetchGamecards,
     };
   },
 };

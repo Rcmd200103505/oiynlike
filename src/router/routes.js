@@ -52,9 +52,21 @@ export default [
     meta: { requiresAuth: true, layout: "BaseLayout" },
   },
   {
+    path: "/lang",
+    name: "lang",
+    component: () => import("@/views/LangPage.vue"),
+    meta: { requiresAuth: true, layout: "BaseLayout" },
+  },
+  {
     path: "/map",
     name: "map",
     component: () => import("@/views/MapPage.vue"),
+    meta: { requiresAuth: true, layout: "BaseLayout" },
+  },
+  {
+    path: "/chats",
+    name: "chats",
+    component: () => import("@/views/ChatsPage.vue"),
     meta: { requiresAuth: true, layout: "BaseLayout" },
   },
 ];

@@ -14,10 +14,12 @@
       accept="image/*"
       @change="handleFileInput"
     />
-    <p class="text-grey-darken-1 font-weight-bold">Выберите фотографию</p>
     <div v-if="imagePreview" class="imagePreview">
-      <img :src="imagePreview" alt="Selected Image" />
+      <img :src="imagePreview" alt="Selected Image" class="w-100 d-block" />
     </div>
+    <p v-else class="text-grey-darken-1 font-weight-bold">
+      Выберите фотографию
+    </p>
   </div>
 </template>
 
@@ -32,7 +34,7 @@ export default {
 
     function handleFileInput(event) {
       const file = event.target.files[0];
-      emit('fileSelected', file);
+      emit("fileSelected", file);
       previewImage(file);
     }
 
@@ -49,7 +51,7 @@ export default {
     function handleDrop(event) {
       event.preventDefault();
       const file = event.dataTransfer.files[0];
-      emit('fileSelected', file);
+      emit("fileSelected", file);
       previewImage(file);
     }
 
