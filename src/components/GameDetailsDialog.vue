@@ -68,7 +68,7 @@ export default {
       isProcessing.value = true;
 
       try {
-        await GameService.joinGame(props.game._id);
+        await GameService.joinGame(props.game.id);
         useToastStore().addToast("Вы успешно присоединились к игре!");
         isDialogShown.value = false;
       } catch (e) {
