@@ -4,19 +4,7 @@
       v-if="noGames"
       class="d-flex flex-column align-center text-center flex-grow-1 justify-center"
     >
-      <img
-        :src="require('@/assets/images/no-games.svg')"
-        alt="no games"
-        width="100"
-      />
-      <h2 class="text-h5">
-        У вас пока нет <br />
-        своих игр
-      </h2>
-      <p class="text-body-2 text-grey-darken-1 my-4">
-        Стань инициатором своей собственной игры! Создавай прямо сейчас!
-      </p>
-      <GameCreateDialog />
+      <!-- Контент для случая, когда нет игр -->
     </div>
     <template v-else>
       <div class="d-flex ga-5">
@@ -35,7 +23,7 @@
       </div>
       <GamesList
         class="flex-grow-1 my-5"
-        :items="gamecards"
+        :items="filteredGamecards"
         :isProcessing="isProcessing"
       />
       <GameCreateDialog />
@@ -64,7 +52,7 @@ export default {
       },
       {
         text: "В модерации",
-        value: "pending",
+        value: "moderation",
       },
     ]);
 
@@ -86,6 +74,16 @@ export default {
       }
     }
 
+    const filteredGamecards = computed(() => {
+      if (activeFilter.value === "all") {
+        return gamecards.value;
+      } else {
+        return gamecards.value.filter(
+          (gamecard) => gamecard.status === activeFilter.value
+        );
+      }
+    });
+
     onMounted(() => {
       fetchGamecards();
     });
@@ -97,6 +95,7 @@ export default {
       activeFilter,
       filters,
       loaded,
+      filteredGamecards,
     };
   },
 };

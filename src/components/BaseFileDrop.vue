@@ -76,13 +76,4 @@ export default {
 .dragArea {
   border-color: #a6a6a6;
 }
-
-.imagePreview {
-  margin-top: 20px;
-
-  & img {
-    max-width: 100%;
-    max-height: 200px;
-  }
-}
 </style>

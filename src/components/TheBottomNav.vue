@@ -34,14 +34,7 @@ export default {
         to: "/chats",
         icon: "far fa-comment-dots",
       },
-      {
-        to: "/users",
-        icon: "fas fa-users",
-      },
-      {
-        to: "/calendar",
-        icon: "far fa-calendar",
-      },
+      
       {
         to: "/profile",
         icon: "fas fa-user",

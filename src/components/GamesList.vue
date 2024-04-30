@@ -6,7 +6,7 @@
           <v-img
             class="align-end text-white"
             height="150"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            :src="item.cover_url"
             cover
           />
           <v-card-item>

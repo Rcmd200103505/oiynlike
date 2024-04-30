@@ -61,29 +61,21 @@
                 :items="GAME_TYPES"
                 variant="outlined"
                 density="comfortable"
-                v-model="form.type"
+                v-model="form.categ"
             />
             <v-label class="text-wrap">
-              Выберите минимальное количество игроков, чтобы открыть чат:
+              Минимальное количество игроков:
             </v-label>
-            <div class="d-flex justify-space-between">
-              <v-btn
-                  v-for="dice in dices"
-                  :key="dice.value"
-                  :icon="dice.icon"
-                  variant="text"
-                  size="large"
-                  :color="
-                  form.min_players === dice.value
-                    ? 'yellow-darken-3'
-                    : 'blue-darken-4'
-                "
-                  @click="form.min_players = dice.value"
-              />
-            </div>
+            <v-text-field
+                placeholder="Введите число"
+                type="number"
+                variant="outlined"
+                density="comfortable"
+                v-model="form.min_players"
+            />
+            
             <v-label class="text-wrap">
-              Введите максимальное количество игроков, чтобы закрыть доступ в
-              чат:
+              Максимальное количество игроков:
             </v-label>
             <v-text-field
                 placeholder="Введите число"
@@ -176,6 +168,8 @@ export default {
 
       try {
         form.value.max_players = Number(form.value.max_players);
+        form.value.min_players = Number(form.value.min_players);
+
         form.value.scheduled_time = new Date(
             `${scheduledDate.value}T${scheduledTime.value}`
         );

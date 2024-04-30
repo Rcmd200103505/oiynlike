@@ -1,11 +1,13 @@
 <template>
-  <BaseDialog v-model="isDialogShown">
+  <BaseDialog>
     <template #activator="{ activatorProps }">
       <v-btn
-        icon="fas fa-chevron-right"
+        icon
+        class="fas fa-chevron-right"
         variant="plain"
         size="small"
         v-bind="activatorProps"
+        @click="closeDialog"
       />
     </template>
     <template #default="{ close }">
@@ -56,10 +58,13 @@ export default {
   },
   setup(props) {
     const isDialogShown = ref(false);
-
     const isProcessing = ref(false);
 
-    async function handleJoin() {
+    const closeDialog = () => {
+      isDialogShown.value = false;
+    };
+
+    const handleJoin = async () => {
       isProcessing.value = true;
 
       try {
@@ -71,9 +76,9 @@ export default {
       } finally {
         isProcessing.value = false;
       }
-    }
+    };
 
-    return { handleJoin, isProcessing, isDialogShown };
+    return { closeDialog, handleJoin, isProcessing, isDialogShown };
   },
 };
 </script>

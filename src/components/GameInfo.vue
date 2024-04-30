@@ -3,7 +3,7 @@
     <div class="text-blue-darken-4 text-body-1 font-weight-bold">
       {{ game.title }}
     </div>
-    <div class="text-grey-darken-2 text-caption">#{{ game.title }}</div>
+    <div class="text-grey-darken-2 text-caption">#{{ game.category }}</div>
   </div>
   <div class="d-flex justify-space-between align-center">
     <div class="d-flex align-center">
@@ -12,7 +12,7 @@
     </div>
     <div class="d-flex align-center">
       <v-icon icon="fas fa-earth-americas" color="primary" />
-      <span class="ml-2 text-body-2">{{ "Алматы" }}</span>
+      <span class="ml-2 text-body-2">{{ game.city }}</span>
     </div>
   </div>
   <template v-if="showDescription">
