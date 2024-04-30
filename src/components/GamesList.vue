@@ -6,7 +6,7 @@
           <v-img
             class="align-end text-white"
             height="150"
-            :src="item.cover_url"
+            :src="getCoverUrl(item)"
             cover
           />
           <v-card-item>
@@ -47,5 +47,10 @@ export default {
       default: () => [],
     },
   },
+  methods: {
+    getCoverUrl(item) {
+      return item.cover_url ? item.cover_url : 'http://161.35.19.27:8000/uploads/Frame.png';
+    }
+  }
 };
 </script>

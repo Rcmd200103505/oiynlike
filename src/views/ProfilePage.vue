@@ -9,7 +9,7 @@
       />
     </div>
     <v-avatar size="130" class="mx-auto d-block mb-2">
-      <v-img alt="John" src="http://localhost:8000/uploads/icon.png"></v-img>
+      <v-img alt="John" src="http://161.35.19.27:8000/uploads/icon.png"></v-img>
     </v-avatar>
     <h2 class="text-h5 font-weight-bold text-center">{{ userFullname }}</h2>
     <div class="d-flex justify-space-between align-center">
