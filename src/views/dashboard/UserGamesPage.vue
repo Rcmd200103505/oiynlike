@@ -16,7 +16,7 @@
       <p class="text-body-2 text-grey-darken-1 my-4">
         Стань инициатором своей собственной игры! Создавай прямо сейчас!
       </p>
-      <GameCreateDialog />
+      <GameCreateDialog @gameCreated="fetchGamecards" />
     </div>
     <template v-else>
       <div class="d-flex ga-5 mt-3">
@@ -40,7 +40,7 @@
         :isProcessing="isProcessing"
         @update="fetchGamecards"
       />
-      <GameCreateDialog />
+      <GameCreateDialog @gameCreated="fetchGamecards"/>
     </template>
   </div>
 </template>

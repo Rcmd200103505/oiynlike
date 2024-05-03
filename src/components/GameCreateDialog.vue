@@ -140,7 +140,7 @@ import { useToastStore } from "@/store/useToastStore";
 
 export default {
   components: { BaseFileDrop, BaseDialog },
-  setup() {
+  setup(props, { emit }) {
     const dialog = ref(false);
 
     const form = ref({
@@ -185,6 +185,7 @@ export default {
         await GameService.createGame(form.value);
         useToastStore().addToast("Вы успешно создали игру!");
         dialog.value = false;
+        emit('gameCreated');
       } catch (e) {
         useToastStore().addToast(e.message, "error");
       } finally {

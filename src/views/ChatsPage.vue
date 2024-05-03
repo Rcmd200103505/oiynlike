@@ -87,6 +87,7 @@ export default {
     const dialog = ref(false);
 
     function onClickChat(chat) {
+      fetchChats();
       dialog.value = true;
       currentChat.value = chat;
     }

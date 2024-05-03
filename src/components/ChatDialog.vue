@@ -83,7 +83,7 @@
 
 <script>
 import BaseDialog from "@/components/BaseDialog.vue";
-import { ref, watch } from "vue";
+import { ref, watch, toRefs } from "vue";
 import { useAuthStore } from "@/store/useAuthStore";
 import { pusher } from "@/utils/pusher";
 import DateUtil from "../utils/DateUtil";
@@ -117,10 +117,15 @@ export default {
       }
     );
 
-    const gameChatChannel = pusher.subscribe("game-chat-" + props.chat?.id);
-    gameChatChannel.bind("new-message", function (data) {
-      console.log("New Message:", data);
-      messages.value.push(data);
+    const { chat } = toRefs(props);
+    // Watch for changes to the chat prop
+    watch(chat, (newChat, oldChat) => {
+      console.log('chat prop changed:', newChat, oldChat);
+      const gameChatChannel = pusher.subscribe("game-chat-" + props.chat?.id);
+      gameChatChannel.bind("new-message", function (data) {
+        console.log("New Message:", data);
+        messages.value.push(data);
+      });
     });
 
     const userNotificationsChannel = pusher.subscribe(
