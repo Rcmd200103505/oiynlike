@@ -65,7 +65,7 @@
               :items="GAME_TYPES"
               variant="outlined"
               density="comfortable"
-              v-model="form.categ"
+              v-model="form.category"
             />
             <v-label class="text-wrap">
               Минимальное количество игроков:
